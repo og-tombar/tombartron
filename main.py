@@ -1,14 +1,20 @@
+# libraries
 import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 import time
 
+# custom modules
+from modules.all_utils import *
+
 # Window dimensions
 width = 800
 height = 600
 
 rotation_angle = 0.0
+render_time = 2.0
+output_prefix = "frame_"
 
 def draw_triangle():
     global rotation_angle
@@ -45,12 +51,16 @@ def update():
     global rotation_angle
     rotation_angle += 1.0
 
-def main():
+def render_to_frames(output_prefix):
     pygame.init()
-    pygame.display.set_mode((width, height), DOUBLEBUF | OPENGL)
+    pygame.display.set_mode((width, height), HIDDEN | DOUBLEBUF | OPENGL)
     init()
 
-    while True:
+    start_time = time.time()
+    elapsed_time = 0.0
+    frame_count = 0
+
+    while elapsed_time < render_time:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -63,7 +73,18 @@ def main():
         update()
         draw_triangle()
         pygame.display.flip()
-        time.sleep(0.01)
+
+        # Save the current frame as an image file
+        pixels = glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE)
+        surface = pygame.image.fromstring(pixels, (width, height), 'RGB')
+        pygame.image.save(surface, f"{FRAMES_DIR_PATH}/{output_prefix}{frame_count:04d}.png")
+
+        frame_count += 1
+        elapsed_time = time.time() - start_time
+
+    pygame.quit()
+
+    print(f"Saved {frame_count} frames as separate files.")
 
 if __name__ == '__main__':
-    main()
+    render_to_frames(output_prefix)
