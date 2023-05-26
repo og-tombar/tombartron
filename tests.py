@@ -40,7 +40,7 @@ def write_wav_file(
 
 def simple_chord() -> None:
     print('Loading SoundFont...')
-    sf2 = open(YAMAHA_C7_SF2_PATH, "rb")
+    sf2 = open(CTK_533_SF2_PATH, "rb")
     sound_font = ms.SoundFont(sf2)
     sf2.close()
 
