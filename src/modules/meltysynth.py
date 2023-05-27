@@ -72,7 +72,7 @@ class _BinaryReaderEx:
 
         for encoding in encodings:
             try:
-                decoded_data = data.decode(encoding)
+                decoded_data = data
                 print(decoded_data)
             except UnicodeDecodeError:
                 print('not valid')
