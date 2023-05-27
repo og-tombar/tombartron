@@ -88,3 +88,6 @@ def render_to_frames(output_prefix):
 
 if __name__ == '__main__':
     render_to_frames(output_prefix)
+    simple_chord()
+    combine_frames_with_audio(FRAMES_DIR_PATH, OUTPUT_DIR_PATH + '/simple_chord.wav', OUTPUT_DIR_PATH + '/video.mp4')
+    empty_dir(FRAMES_DIR_PATH)
