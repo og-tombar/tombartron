@@ -1629,7 +1629,11 @@ class SoundFont:
     _instruments: Sequence[Instrument]
 
     def __init__(self, reader: BufferedReader) -> None:
+        print('Buffered reader:')
+        print(reader)
         chunk_id = _BinaryReaderEx.read_four_cc(reader)
+        print('Chunk ID:')
+        print(chunk_id)
         if chunk_id != "RIFF":
             raise Exception("The RIFF chunk was not found.")
 
