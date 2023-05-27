@@ -2,6 +2,7 @@ from moviepy.editor import ImageSequenceClip, AudioFileClip
 
 from modules.paths import *
 
+
 def combine_frames_with_audio(frames_folder, audio_file, output_path):
     frames = [f"{frames_folder}/{frame}" for frame in sorted(os.listdir(frames_folder))]
     video_clip = ImageSequenceClip(frames, fps=60)

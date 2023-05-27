@@ -7,6 +7,7 @@ import time
 from array import array
 from collections.abc import Sequence
 
+
 def write_wav_file(sample_rate: int, left: Sequence[float], right: Sequence[float], path: str) -> None:
     max_value = 0.0
 
@@ -36,6 +37,7 @@ def write_wav_file(sample_rate: int, left: Sequence[float], right: Sequence[floa
     wav.close()
 
 
+# noinspection PyTypeChecker
 def simple_chord() -> None:
     print('Loading SoundFont...')
     sf2 = open(CTK_533_SF2_PATH, "rb")

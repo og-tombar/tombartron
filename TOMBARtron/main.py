@@ -3,7 +3,6 @@ import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import time
 
 # custom modules
 from modules.all_utils import *
@@ -15,6 +14,7 @@ height = 600
 rotation_angle = 0.0
 render_time = 2.0
 output_prefix = "frame_"
+
 
 def draw_triangle():
     global rotation_angle
@@ -38,6 +38,7 @@ def draw_triangle():
     
     glFlush()
 
+
 def init():
     glClearColor(0.0, 0.0, 0.0, 1.0)  # Black background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -47,9 +48,11 @@ def init():
     gluPerspective(45, (width / height), 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
 
+
 def update():
     global rotation_angle
     rotation_angle += 1.0
+
 
 def render_to_frames(output_prefix):
     pygame.init()
@@ -85,6 +88,7 @@ def render_to_frames(output_prefix):
     pygame.quit()
 
     print(f"Saved {frame_count} frames as separate files.")
+
 
 if __name__ == '__main__':
     render_to_frames(output_prefix)
