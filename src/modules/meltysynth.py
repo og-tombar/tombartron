@@ -68,18 +68,6 @@ class _BinaryReaderEx:
             if not (32 <= value and value <= 126):
                 data[i] = 63  # '?'
 
-        encodings = ["ascii", "utf-8", "latin-1"]  # Add more encodings if needed
-
-        for encoding in encodings:
-            try:
-                decoded_data = data.decode(encoding)
-                print(decoded_data)
-                for byte in data:
-                    print(hex(byte))
-            except UnicodeDecodeError:
-                print('not valid')
-
-        exit()
         return data.decode("ascii")
 
     @staticmethod
