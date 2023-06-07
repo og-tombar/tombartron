@@ -69,11 +69,3 @@ def simple_chord() -> None:
     print('Saving WAV file...')
     # Save the waveform as a WAV file.
     write_wav_file(settings.sample_rate, left, right, OUTPUT_DIR_PATH + '/simple_chord.wav')
-
-
-def main() -> None:
-    simple_chord()
-
-
-if __name__ == "__main__":
-    main()
