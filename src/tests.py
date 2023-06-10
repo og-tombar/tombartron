@@ -17,6 +17,4 @@ def test_video_upload():
         print("Video upload failed.")
 
 
-# test_video_upload()
-
-print(type(os.stat(SCENE_ELEMENTS_JSON_PATH).st_mtime))
+test_video_upload()
