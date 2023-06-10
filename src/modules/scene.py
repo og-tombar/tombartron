@@ -90,6 +90,8 @@ class Scene:
     def render_frame_to_file(self, frame_count: int) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)
         surface = pygame.image.fromstring(pixels, (self.WINDOW_WIDTH, self.WINDOW_HEIGHT), 'RGB')
+        if not os.path.exists(FRAMES_DIR_PATH):
+            os.makedirs(FRAMES_DIR_PATH)
         pygame.image.save(surface, f"{FRAMES_DIR_PATH}/frame_{frame_count:04d}.png")
 
     def render_movie_frames(self, render_time: float) -> None:
