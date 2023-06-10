@@ -8,6 +8,7 @@ if __name__ == '__main__':
         # defaulting to hidden video render mode if no arguments provided
         scene = Scene(hidden=True)
         render_movie(scene)
+        upload_video_with_default_config()
         exit()
 
     scene = Scene()
