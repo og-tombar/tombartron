@@ -1,0 +1,10 @@
+[
+  {
+    "shape": "triangle",
+    "vertices": [
+      {"x_pos": 0.0, "y_pos": 0.5, "z_pos": 0.0, "color": "red"},
+      {"x_pos": -0.5, "y_pos": -0.5, "z_pos": 0.5, "color": "white"},
+      {"x_pos": 0.5, "y_pos": -0.5, "z_pos": 0.0, "color": "blue"}
+    ]
+  }
+]

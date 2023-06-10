@@ -1,10 +1,7 @@
-from modules.paths import *
-from modules.metadata_utils import generate_video_title
-from modules.youtube_api_backend import upload_video_to_youtube
+from modules.all_utils import *
 
 
 def test_video_upload():
-    # Example usage:
     video_path = OUTPUT_DIR_PATH + '/video.mp4'
     title = generate_video_title()
     description = "This video is an early TOMBARtron experiment." \
@@ -20,4 +17,6 @@ def test_video_upload():
         print("Video upload failed.")
 
 
-test_video_upload()
+# test_video_upload()
+
+print(type(os.stat(SCENE_ELEMENTS_JSON_PATH).st_mtime))

@@ -1,11 +1,10 @@
-from modules.paths import *
-import modules.meltysynth as ms
-
 import wave
 import time
-
 from array import array
 from collections.abc import Sequence
+
+from modules.paths import *
+import modules.meltysynth as ms
 
 
 def write_wav_file(sample_rate: int, left: Sequence[float], right: Sequence[float], path: str) -> None:
