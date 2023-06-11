@@ -1,6 +1,5 @@
 # TOMBARtron
 
-To Do:
 - [ ] INFRASTRUCTURE FOR MUSIC
     - [ ] MIDI sequencer class
     - [ ]  Simple piano composition logic (three notes)
@@ -9,8 +8,8 @@ To Do:
     - [ ]  Long form composition logic
 
 - [ ] INFRASTRUCTURE FOR VIDEO
-    a. Define shape classes (cuboid, spheres, etc.)
-    b. Framework for real time scene editing and rendering.
+    - [ ] Define shape classes (cuboid, spheres, etc.)
+    - [ ] Framework for real time scene editing and rendering.
 
 - [ ] METADATA LOGIC
-- [ ] WEEKLY CRON
+- [x] WEEKLY CRON
