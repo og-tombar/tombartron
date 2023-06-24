@@ -1,5 +1,6 @@
 # main modules
 from modules.scene import *
+from modules.shapes import *
 from modules.audio_utils import *
 from modules.movie_utils import *
 

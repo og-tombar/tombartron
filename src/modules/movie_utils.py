@@ -5,8 +5,8 @@ from modules.paths import *
 from modules.other_utils import *
 
 
-def combine_frames_and_audio(frames_folder, audio_file, output_path) -> None:
-    frames = [f"{frames_folder}/{frame}" for frame in sorted(os.listdir(frames_folder))]
+def combine_frames_and_audio(frames_dir, audio_file, output_path) -> None:
+    frames = [f"{frames_dir}/{frame}" for frame in sorted(os.listdir(frames_dir))]
     video_clip = ImageSequenceClip(frames, fps=60)
     audio_clip = AudioFileClip(audio_file)
     final_clip = video_clip.set_audio(audio_clip)

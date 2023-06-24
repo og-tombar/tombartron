@@ -1,10 +1,20 @@
 [
   {
+    "element_id": "triangle1",
     "shape": "triangle",
-    "vertices": [
-      {"x_pos": 0.0, "y_pos": 0.5, "z_pos": 0.0, "color": "red"},
-      {"x_pos": -0.5, "y_pos": -0.5, "z_pos": 0.5, "color": "white"},
-      {"x_pos": 0.5, "y_pos": -0.5, "z_pos": 0.0, "color": "blue"}
-    ]
+    "offset": {"z": -3},
+    "vertices": [{"color": "blue"}, {"color": "red"}]
+  },
+  {
+    "element_id": "triangle2",
+    "shape": "triangle",
+    "offset": {"x": -1, "z": -4},
+    "vertices": [{"color": "blue"}, {"color": "green"}]
+  },
+  {
+    "element_id": "triangle3",
+    "shape": "triangle",
+    "offset": {"x": 1, "z": -5},
+    "vertices": [{"color": "red"}, {"color": "green"}]
   }
 ]

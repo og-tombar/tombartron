@@ -4,10 +4,9 @@ import time
 import pygame
 from pygame.locals import *
 from OpenGL.GLU import *
-from OpenGL.GL import *
 
 from modules.paths import *
-from modules.color import color
+from modules.shapes import *
 
 
 class Scene:
@@ -59,7 +58,7 @@ class Scene:
         self.update_scene_elements()
 
         for element in self.scene_elements_list:
-            self.draw_element(element)
+            self.create_element(element)
 
         pygame.display.flip()
         glFlush()
@@ -77,15 +76,19 @@ class Scene:
         return False
 
     @staticmethod
-    def draw_element(element: dict) -> None:
-        if element['shape'] == 'triangle':
-            glBegin(GL_TRIANGLES)
-            for vertex in element['vertices']:
-                # vertex color
-                glColor3f(*color.get(vertex['color'], color['white']))
-                # vertex coordinates
-                glVertex3f(*(vertex['x_pos'], vertex['y_pos'], vertex['z_pos']))
-            glEnd()
+    def create_element(element: dict) -> None:
+        element = PolyhedronFactory.construct(element)
+        element.draw()
+
+        # if element['shape'] == 'triangle':
+        #     glBegin(GL_TRIANGLES)
+        #     for vertex in element['vertices']:
+        #         glColor3f(*colors.get(vertex['color'], colors['white']))
+        #         x = vertex['x_pos'] + element['offset']['x']
+        #         y = vertex['y_pos'] + element['offset']['y']
+        #         z = vertex['z_pos'] + element['offset']['z']
+        #         glVertex3f(*(x, y, z))
+        #     glEnd()
 
     def render_frame_to_file(self, frame_count: int) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)

@@ -1,3 +1,6 @@
 from modules.all_utils import *
 
-upload_video_with_default_config()
+t = Triangle()
+print(t)
+
+# upload_video_with_default_config()
