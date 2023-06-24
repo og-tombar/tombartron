@@ -1,16 +1,15 @@
 # TOMBARtron
 
-To Do:
-1. INFRASTRUCTURE FOR MUSIC
-    a. MIDI sequencer class
-    b. Simple piano composition logic (three notes)
-    c. Simple multi instrument composition logic
-    d. Multi instrument mixing and rendering
-    e. Long form composition logic
+- [ ] Infrastructure For Audio
+    - [ ] MIDI sequencer class
+    - [ ]  Simple piano composition logic (three notes)
+    - [ ]  Simple multi instrument composition logic
+    - [ ]  Multi instrument mixing and rendering
+    - [ ]  Long form composition logic
 
-2. INFRASTRUCTURE FOR VIDEO
-    a. Define shape classes (cuboid, spheres, etc.)
-    b. Framework for real time scene editing and rendering.
+- [ ] Infrastructure For Video
+    - [ ] Define shape classes (cuboid, spheres, etc.)
+    - [ ] Framework for real time scene editing and rendering.
 
-3. METADATA LOGIC
-4. WEEKLY CRON
+- [ ] METADATA LOGIC
+- [x] WEEKLY CRON
