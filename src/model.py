@@ -7,7 +7,7 @@ class BaseModel:
     def __init__(self, app, vao_name, tex_id, pos=(0, 0, 0), rot=(0, 0, 0), scale=(1, 1, 1)):
         self.app = app
         self.pos = pos
-        self.rot = glm.vec3(rot[0], rot[1], rot[2])
+        self.rot = glm.vec3(*[glm.radians(a) for a in rot])
         self.scale = scale
         self.m_model = self.get_model_matrix()
         self.tex_id = tex_id
