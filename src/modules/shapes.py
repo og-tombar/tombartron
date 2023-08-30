@@ -7,8 +7,8 @@ from modules.color import colors
 from modules.other_utils import *
 
 
-class Polyhedron:
-    def __init__(self, element_id='polyhedron', shape='polyhedron', offset=None, scale=None, vertices=None):
+class Polygon:
+    def __init__(self, element_id='polygon', shape='polygon', offset=None, scale=None, vertices=None):
         self.element_id = element_id
         self.shape = shape
 
@@ -35,21 +35,15 @@ class Polyhedron:
         s += str(self.vertices)
         return s
 
-    def draw(self):
-        for vertex in self.vertices:
-            glColor3f(*colors.get(vertex.get('color'), 'white'))
-            x_pos = vertex.get('x_pos', 0.0) * self.x_scale + self.x_offset
-            y_pos = vertex.get('y_pos', 0.0) * self.y_scale + self.y_offset
-            z_pos = vertex.get('z_pos', 0.0) * self.z_scale + self.z_offset
-            glVertex3f(*(x_pos, y_pos, z_pos))
+    def draw(self): ...
 
 
-class Triangle(Polyhedron):
+class Triangle(Polygon):
     def __init__(self, element_id='triangle', shape='triangle', **kwargs):
         super().__init__(element_id=element_id, shape=shape, **kwargs)
         self.default_vertices()
 
-    def default_vertices(self):
+    def default_vertices(self) -> None:
         default1 = {"color": "white", "x_pos": 0.0, "y_pos": 1.0, "z_pos": 0.0}
         default2 = {"color": "white", "x_pos": -math.sqrt(3)/2, "y_pos": -0.5, "z_pos": 0.0}
         default3 = {"color": "white", "x_pos": math.sqrt(3)/2, "y_pos": -0.5, "z_pos": 0.0}
@@ -60,18 +54,51 @@ class Triangle(Polyhedron):
 
         self.vertices = defaults
 
-        # for i in reversed(range(missing_vertices)):
-        #     self.vertices.append(defaults[i])
-
-    def draw(self):
+    def draw(self) -> None:
         glBegin(GL_TRIANGLES)
-        super().draw()
+        for vertex in self.vertices:
+            glColor3f(*colors.get(vertex.get('color'), 'white'))
+            x_pos = vertex.get('x_pos', 0.0) * self.x_scale + self.x_offset
+            y_pos = vertex.get('y_pos', 0.0) * self.y_scale + self.y_offset
+            z_pos = vertex.get('z_pos', 0.0) * self.z_scale + self.z_offset
+            glVertex3f(*(x_pos, y_pos, z_pos))
         glEnd()
 
 
-class PolyhedronFactory:
+class Rectangle(Polygon):
+    def __init__(self, element_id='rectangle', shape='rectangle', **kwargs):
+        super().__init__(element_id=element_id, shape=shape, **kwargs)
+        self.triangles = []
+        self.default_vertices()
+        self.triangles = self.to_triangles(**kwargs)
+
+    def default_vertices(self) -> None:
+        default1 = {"color": "white", "x_pos": 1.0, "y_pos": 1.0, "z_pos": 0.0}
+        default2 = {"color": "white", "x_pos": -1.0, "y_pos": 1.0, "z_pos": 0.0}
+        default3 = {"color": "white", "x_pos": -1.0, "y_pos": -1.0, "z_pos": 0.0}
+        default4 = {"color": "white", "x_pos": 1.0, "y_pos": -1.0, "z_pos": 0.0}
+
+        defaults = [default1, default2, default3, default4]
+        for i, vertex in enumerate(self.vertices):
+            update_dict_recursive(src_dict=vertex, dest_dict=defaults[i])
+
+        self.vertices = defaults
+
+    def to_triangles(self, vertices, **kwargs) -> [Triangle]:
+        t1 = Triangle(element_id='t1', vertices=[self.vertices[0], self.vertices[1], self.vertices[2]], **kwargs)
+        t2 = Triangle(element_id='t2', vertices=[self.vertices[2], self.vertices[3], self.vertices[0]], **kwargs)
+        return [t1, t2]
+
+    def draw(self) -> None:
+        for triangle in self.triangles:
+            triangle.draw()
+
+
+class PolygonFactory:
     @staticmethod
-    def construct(element_data: dict):
+    def construct(element_data: dict) -> Polygon:
         match element_data['shape']:
             case 'triangle':
                 return Triangle(**element_data)
+            case 'rectangle':
+                return Rectangle(**element_data)

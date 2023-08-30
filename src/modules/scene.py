@@ -7,6 +7,7 @@ from OpenGL.GLU import *
 
 from modules.paths import *
 from modules.shapes import *
+from modules.camera import Camera
 
 
 class Scene:
@@ -27,6 +28,7 @@ class Scene:
             # pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.OPENGL)
 
         self.init_gl()
+        self.camera = Camera()
 
     def init_gl(self):
         glClearColor(0.0, 0.0, 0.0, 1.0)
@@ -50,11 +52,7 @@ class Scene:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
 
-        self.rotation_angle += 1.0
-
-        glTranslatef(0.0, 0.0, -2.0)  # Move the triangle away from the camera
-        glRotatef(self.rotation_angle, 1.0, 1.0, 1.0)  # Rotate the triangle
-
+        self.camera.update()
         self.update_scene_elements()
 
         for element in self.scene_elements_list:
@@ -77,18 +75,8 @@ class Scene:
 
     @staticmethod
     def create_element(element: dict) -> None:
-        element = PolyhedronFactory.construct(element)
+        element = PolygonFactory.construct(element)
         element.draw()
-
-        # if element['shape'] == 'triangle':
-        #     glBegin(GL_TRIANGLES)
-        #     for vertex in element['vertices']:
-        #         glColor3f(*colors.get(vertex['color'], colors['white']))
-        #         x = vertex['x_pos'] + element['offset']['x']
-        #         y = vertex['y_pos'] + element['offset']['y']
-        #         z = vertex['z_pos'] + element['offset']['z']
-        #         glVertex3f(*(x, y, z))
-        #     glEnd()
 
     def render_frame_to_file(self, frame_count: int) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)
