@@ -30,7 +30,7 @@ class Scene:
         self.init_gl()
         self.camera = Camera()
 
-    def init_gl(self):
+    def init_gl(self) -> None:
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glEnable(GL_DEPTH_TEST)
@@ -39,7 +39,7 @@ class Scene:
         gluPerspective(45, (self.WINDOW_WIDTH / self.WINDOW_HEIGHT), 0.1, 50.0)
         glMatrixMode(GL_MODELVIEW)
 
-    def play_scene(self):
+    def play_scene(self) -> None:
         quit_trigger = False
         while not quit_trigger:
             self.update_scene()
@@ -75,8 +75,11 @@ class Scene:
 
     @staticmethod
     def create_element(element: dict) -> None:
-        element = PolygonFactory.construct(element)
+        element = PolyhedronFactory.construct(element)
+        glPushMatrix()
+        element.pre_process()
         element.draw()
+        glPopMatrix()
 
     def render_frame_to_file(self, frame_count: int) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)

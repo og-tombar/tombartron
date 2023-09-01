@@ -1,7 +1,6 @@
 [
   {
-    "element_id": "rectangle1",
-    "shape": "rectangle",
-    "vertices": [{"color": "red"}, {"color": "blue"}, {"color": "green"}, {"color": "blue"}]
+    "element_id": "cuboid",
+    "shape": "cuboid"
   }
 ]
