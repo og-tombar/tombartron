@@ -5,7 +5,7 @@ from typing import List
 
 from OpenGL.GL import *
 
-from modules.color import colors
+from modules.colors import colors_rgb
 from modules.other_utils import *
 
 
@@ -109,7 +109,7 @@ class Triangle(Polyhedron):
         glBegin(GL_TRIANGLES)
         glNormal3fv(self.normal)
         for vertex in self.vertices:
-            glColor3f(*colors.get(vertex.get('color'), 'white'))
+            glColor3f(*colors_rgb.get(vertex.get('color'), 'white'))
             x_pos = vertex.get('x_pos', 0.0) * self.x_scale + self.x_offset - shape_center[0]
             y_pos = vertex.get('y_pos', 0.0) * self.y_scale + self.y_offset - shape_center[1]
             z_pos = vertex.get('z_pos', 0.0) * self.z_scale + self.z_offset - shape_center[2]
@@ -125,10 +125,10 @@ class Rectangle(Polyhedron):
         self.triangles = self.to_triangles(**kwargs)
 
     def default_vertices(self) -> None:
-        bottom_left = {"color": self.color, "x_pos": -1.0, "y_pos": -1.0, "z_pos": 0.0}
-        bottom_right = {"color": self.color, "x_pos": 1.0, "y_pos": -1.0, "z_pos": 0.0}
-        top_right = {"color": self.color, "x_pos": 1.0, "y_pos": 1.0, "z_pos": 0.0}
-        top_left = {"color": self.color, "x_pos": -1.0, "y_pos": 1.0, "z_pos": 0.0}
+        bottom_left = {"color": self.color, "x_pos": -0.5, "y_pos": -0.5, "z_pos": 0.0}
+        bottom_right = {"color": self.color, "x_pos": 0.5, "y_pos": -0.5, "z_pos": 0.0}
+        top_right = {"color": self.color, "x_pos": 0.5, "y_pos": 0.5, "z_pos": 0.0}
+        top_left = {"color": self.color, "x_pos": -0.5, "y_pos": 0.5, "z_pos": 0.0}
 
         defaults = [bottom_left, bottom_right, top_right, top_left]
         for i, vertex in enumerate(self.vertices):
@@ -156,15 +156,15 @@ class Cuboid(Polyhedron):
         self.rectangles = self.to_rectangles(**kwargs)
 
     def default_vertices(self) -> None:
-        front_bottom_left = {"color": self.color, "x_pos": -1.0, "y_pos": -1.0, "z_pos": 1.0}  # 0
-        front_bottom_right = {"color": self.color, "x_pos": 1.0, "y_pos": -1.0, "z_pos": 1.0}  # 1
-        front_top_right = {"color": self.color, "x_pos": 1.0, "y_pos": 1.0, "z_pos": 1.0}  # 2
-        front_top_left = {"color": self.color, "x_pos": -1.0, "y_pos": 1.0, "z_pos": 1.0}  # 3
+        front_bottom_left = {"color": self.color, "x_pos": -0.5, "y_pos": -0.5, "z_pos": 0.5}  # 0
+        front_bottom_right = {"color": self.color, "x_pos": 0.5, "y_pos": -0.5, "z_pos": 0.5}  # 1
+        front_top_right = {"color": self.color, "x_pos": 0.5, "y_pos": 0.5, "z_pos": 0.5}  # 2
+        front_top_left = {"color": self.color, "x_pos": -0.5, "y_pos": 0.5, "z_pos": 0.5}  # 3
 
-        back_top_left = {"color": self.color, "x_pos": -1.0, "y_pos": 1.0, "z_pos": -1.0}  # 4
-        back_top_right = {"color": self.color, "x_pos": 1.0, "y_pos": 1.0, "z_pos": -1.0}  # 5
-        back_bottom_right = {"color": self.color, "x_pos": 1.0, "y_pos": -1.0, "z_pos": -1.0}  # 6
-        back_bottom_left = {"color": self.color, "x_pos": -1.0, "y_pos": -1.0, "z_pos": -1.0}  # 7
+        back_top_left = {"color": self.color, "x_pos": -0.5, "y_pos": 0.5, "z_pos": -0.5}  # 4
+        back_top_right = {"color": self.color, "x_pos": 0.5, "y_pos": 0.5, "z_pos": -0.5}  # 5
+        back_bottom_right = {"color": self.color, "x_pos": 0.5, "y_pos": -0.5, "z_pos": -0.5}  # 6
+        back_bottom_left = {"color": self.color, "x_pos": -0.5, "y_pos": -0.5, "z_pos": -0.5}  # 7
 
         defaults = [front_bottom_left, front_bottom_right, front_top_right, front_top_left,
                     back_top_left, back_top_right, back_bottom_right, back_bottom_left]

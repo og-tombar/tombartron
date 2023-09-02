@@ -1,3 +1,12 @@
 [
-  {"shape": "cuboid", "rotation": {"yaw": 0, "pitch": 0, "roll": 0}}
+  {
+    "element_id": "main_panel",
+    "type": "cuboid",
+    "scale": {
+      "x": 3,
+      "y": 0.1,
+      "z": 1.5
+    },
+    "color": "red"
+  }
 ]

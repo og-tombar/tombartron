@@ -1,4 +1,3 @@
-import json
 import time
 
 import pygame
@@ -9,6 +8,8 @@ from modules.paths import *
 from modules.shapes import *
 from modules.camera import Camera
 from modules.light import Light
+from modules.colors import colors_rgba
+from modules.scene_elements import SceneElements
 
 
 class Scene:
@@ -16,8 +17,8 @@ class Scene:
         self.WINDOW_WIDTH = 800
         self.WINDOW_HEIGHT = 600
 
-        self.scene_elements_last_modified = 0.0
-        self.scene_elements_list: list = []
+        # self.scene_elements_last_modified = 0.0
+        # self.scene_elements_list: list = []
 
         pygame.init()
 
@@ -31,9 +32,10 @@ class Scene:
         self.init_gl()
         self.camera = Camera()
         self.light = Light()
+        self.scene_elements = SceneElements()
 
     def init_gl(self) -> None:
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(*colors_rgba['dark_gray'])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_PROJECTION)
@@ -58,32 +60,11 @@ class Scene:
 
         self.camera.update()
         self.light.activate()
-        self.update_scene_elements()
-
-        # temp
-        self.scene_elements_list[0]['rotation']['yaw'] += 0.1
-        self.scene_elements_list[0]['rotation']['pitch'] += 1
-        self.scene_elements_list[0]['rotation']['roll'] += 0.1
-
-        for element in self.scene_elements_list:
-            self.create_element(element)
-
+        self.scene_elements.render()
         self.light.deactivate()
 
         pygame.display.flip()
         glFlush()
-
-    def update_scene_elements(self) -> bool:
-        try:
-            # checking if scene elements file has changed or this function runs for the first time
-            if self.scene_elements_last_modified != os.stat(SCENE_ELEMENTS_JSON_PATH).st_mtime:
-                with open(SCENE_ELEMENTS_JSON_PATH, 'r') as file:
-                    self.scene_elements_list = json.load(file)
-                self.scene_elements_last_modified = os.stat(SCENE_ELEMENTS_JSON_PATH).st_mtime
-                return True
-        except json.decoder.JSONDecodeError:
-            pass
-        return False
 
     @staticmethod
     def create_element(element: dict) -> None:
