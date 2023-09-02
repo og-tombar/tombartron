@@ -2,12 +2,13 @@ from OpenGL.GL import *
 
 
 class Light:
-    def __init__(self, position=(0, -100, 0, 0)):
+    def __init__(self, position=(0, -100, 0, 1)):
         self.position = position
 
         glLight(GL_LIGHT0, GL_POSITION, self.position)
-        glLightfv(GL_LIGHT0, GL_AMBIENT, (0, 0, 0, 1))
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, (1, 1, 1, 1))
+        glLightfv(GL_LIGHT0, GL_AMBIENT, (0.1, 0.1, 0.1, 1))
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, (0.8, 0.8, 0.8, 1))
+        glLightfv(GL_LIGHT0, GL_SPECULAR, (1, 1, 1, 1))
         glEnable(GL_DEPTH_TEST)
 
     def activate(self):

@@ -6,7 +6,7 @@ class Camera:
         self.x_pos = 5
         self.y_pos = 5
         self.z_pos = 5
-        self.yaw = -45
+        self.yaw = -40
         self.pitch = 45
         self.roll = 0.0
 

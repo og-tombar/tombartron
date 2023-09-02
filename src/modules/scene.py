@@ -60,6 +60,7 @@ class Scene:
         self.light.activate()
         self.update_scene_elements()
 
+        # temp
         self.scene_elements_list[0]['rotation']['yaw'] += 0.1
         self.scene_elements_list[0]['rotation']['pitch'] += 1
         self.scene_elements_list[0]['rotation']['roll'] += 0.1
