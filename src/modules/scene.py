@@ -8,6 +8,7 @@ from OpenGL.GLU import *
 from modules.paths import *
 from modules.shapes import *
 from modules.camera import Camera
+from modules.light import Light
 
 
 class Scene:
@@ -15,7 +16,6 @@ class Scene:
         self.WINDOW_WIDTH = 800
         self.WINDOW_HEIGHT = 600
 
-        self.rotation_angle = 0.0
         self.scene_elements_last_modified = 0.0
         self.scene_elements_list: list = []
 
@@ -25,10 +25,12 @@ class Scene:
             pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT), HIDDEN | DOUBLEBUF | OPENGL)
         else:
             pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT), DOUBLEBUF | OPENGL)
+            # full screen:
             # pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.OPENGL)
 
         self.init_gl()
         self.camera = Camera()
+        self.light = Light()
 
     def init_gl(self) -> None:
         glClearColor(0.0, 0.0, 0.0, 1.0)
@@ -36,6 +38,8 @@ class Scene:
         glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
+
+        # TODO: Change this to address full screen as well?
         gluPerspective(45, (self.WINDOW_WIDTH / self.WINDOW_HEIGHT), 0.1, 50.0)
         glMatrixMode(GL_MODELVIEW)
 
@@ -53,10 +57,17 @@ class Scene:
         glLoadIdentity()
 
         self.camera.update()
+        self.light.activate()
         self.update_scene_elements()
+
+        self.scene_elements_list[0]['rotation']['yaw'] += 0.1
+        self.scene_elements_list[0]['rotation']['pitch'] += 1
+        self.scene_elements_list[0]['rotation']['roll'] += 0.1
 
         for element in self.scene_elements_list:
             self.create_element(element)
+
+        self.light.deactivate()
 
         pygame.display.flip()
         glFlush()

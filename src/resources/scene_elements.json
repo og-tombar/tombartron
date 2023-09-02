@@ -1,6 +1,3 @@
 [
-  {
-    "element_id": "cuboid",
-    "shape": "cuboid"
-  }
+  {"shape": "cuboid", "rotation": {"yaw": 0, "pitch": 0, "roll": 0}}
 ]

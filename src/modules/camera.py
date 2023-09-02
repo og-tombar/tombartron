@@ -3,11 +3,11 @@ from OpenGL.GL import *
 
 class Camera:
     def __init__(self):
-        self.x_pos = 0
-        self.y_pos = 0
+        self.x_pos = 5
+        self.y_pos = 5
         self.z_pos = 5
-        self.yaw = 0
-        self.pitch = 0
+        self.yaw = -45
+        self.pitch = 45
         self.roll = 0.0
 
     # we use negative coords for position as glTranslatef moves the scene elements rather than the camera
