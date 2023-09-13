@@ -47,7 +47,6 @@ class Scene:
         while not quit_trigger:
             self.update_scene()
             pygame.time.delay(int(1000 / 60))
-            self.process_pressed_keys()
             quit_trigger = self.pygame_check_for_quit()
         pygame.quit()
         print("Rendering complete.")
@@ -56,6 +55,7 @@ class Scene:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
 
+        self.process_pressed_keys()
         self.camera.update()
         self.light.activate()
         self.scene_elements.render()

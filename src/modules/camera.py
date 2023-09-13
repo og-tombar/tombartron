@@ -16,7 +16,7 @@ class Camera:
         self.roll = 0
 
         self.move_speed = 0.1
-        self.rotation_speed = 1
+        self.rotation_speed = 1.5
 
         self.forward = self.calc_forward_vec()
         self.right = self.calc_right_vec()
@@ -29,10 +29,7 @@ class Camera:
         forward_y = self.y_pos + self.forward[1]
         forward_z = self.z_pos + self.forward[2]
 
-        gluLookAt(
-            self.x_pos, self.y_pos, self.z_pos,  # Camera position (eye)
-            forward_x, forward_y, forward_z,  # Camera looking direction
-            0, 1, 0)  # Up vector
+        gluLookAt(self.x_pos, self.y_pos, self.z_pos, forward_x, forward_y, forward_z, 0, 1, 0)
 
     def set_position(self, x_pos: float, y_pos: float, z_pos: float) -> None:
         self.x_pos = x_pos
@@ -80,7 +77,7 @@ class Camera:
 
     def set_rotation(self, yaw: float, pitch: float, roll: float) -> None:
         self.yaw = (yaw + 180) % 360 - 180  # should be between (-179, 180), rotates on overflow / underflow
-        self.pitch = max(min(pitch, 89), -89)  # should be in (-89, 89)
+        self.pitch = max(min(pitch, 89), -89)  # should be in (-89, 89), doesn't rotate on overflow / underflow
         self.roll = roll
 
     def rotate(self, d_yaw: float, d_pitch: float, d_roll: float) -> None:
