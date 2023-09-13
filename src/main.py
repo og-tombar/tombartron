@@ -1,6 +1,8 @@
 import sys
 
-from modules.all_utils import *
+from modules.scene import Scene
+from modules.movie_utils import render_movie
+from modules.youtube_utils import upload_video_with_default_config
 
 
 if __name__ == '__main__':

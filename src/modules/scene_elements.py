@@ -1,12 +1,12 @@
 from OpenGL.GL import *
 
-from modules.piano import WhiteKey, Piano
+from modules.models import PianoModel
+from modules.piano import Piano
 
 
 class SceneElements:
     def __init__(self):
-        self.elements = {}
-        self.create_piano()
+        self.elements = {'piano': Piano(piano_model=PianoModel(keys_amount=49))}
 
     def render(self):
         for element in self.elements.values():
@@ -14,8 +14,3 @@ class SceneElements:
             element.pre_process()
             element.draw()
             glPopMatrix()
-
-    def create_piano(self):
-        self.elements['piano'] = Piano()
-        for i in range(7):
-            self.elements[f'key{i}'] = WhiteKey(offset={'x': -1 + i * 0.21})

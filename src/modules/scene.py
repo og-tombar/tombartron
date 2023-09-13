@@ -5,7 +5,7 @@ from pygame.locals import *
 from OpenGL.GLU import *
 
 from modules.paths import *
-from modules.shapes import *
+from modules.geometries import *
 from modules.camera import Camera
 from modules.light import Light
 from modules.colors import colors_rgba
@@ -16,9 +16,6 @@ class Scene:
     def __init__(self, hidden=False):
         self.WINDOW_WIDTH = 800
         self.WINDOW_HEIGHT = 600
-
-        # self.scene_elements_last_modified = 0.0
-        # self.scene_elements_list: list = []
 
         pygame.init()
 
@@ -50,6 +47,7 @@ class Scene:
         while not quit_trigger:
             self.update_scene()
             pygame.time.delay(int(1000 / 60))
+            self.process_pressed_keys()
             quit_trigger = self.pygame_check_for_quit()
         pygame.quit()
         print("Rendering complete.")
@@ -66,13 +64,37 @@ class Scene:
         pygame.display.flip()
         glFlush()
 
-    @staticmethod
-    def create_element(element: dict) -> None:
-        element = PolyhedronFactory.construct(element)
-        glPushMatrix()
-        element.pre_process()
-        element.draw()
-        glPopMatrix()
+    # TODO: Create a pygame config class and move this function to it?
+    def process_pressed_keys(self):
+        keys = pygame.key.get_pressed()
+
+        dx, dy, dz = 0, 0, 0
+        d_yaw, d_pitch, d_roll = 0, 0, 0
+
+        if keys[K_w]:
+            self.camera.move_forward()
+        if keys[K_s]:
+            self.camera.move_back()
+        if keys[K_a]:
+            self.camera.move_left()
+        if keys[K_d]:
+            self.camera.move_right()
+        if keys[K_q]:
+            self.camera.move_up()
+        if keys[K_e]:
+            self.camera.move_down()
+
+        if keys[K_LEFT]:
+            d_yaw = -self.camera.rotation_speed
+        if keys[K_RIGHT]:
+            d_yaw = self.camera.rotation_speed
+        if keys[K_UP]:
+            d_pitch = -self.camera.rotation_speed
+        if keys[K_DOWN]:
+            d_pitch = self.camera.rotation_speed
+
+        self.camera.move(dx, dy, dz)
+        self.camera.rotate(d_yaw, d_pitch, d_roll)
 
     def render_frame_to_file(self, frame_count: int) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)

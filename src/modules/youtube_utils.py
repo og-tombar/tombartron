@@ -3,7 +3,7 @@ import random
 from enum import Enum
 
 from modules.paths import *
-from modules.youtube_api_backend import upload_video_to_youtube
+from modules.youtube_api_controller import upload_video_to_youtube
 
 
 class TitleType(Enum):
