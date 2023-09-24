@@ -1,99 +1,85 @@
 from modules.models import PianoModel
 from modules.geometries import Cuboid
-from modules.element_node import ElementNode
+from modules.transform_node import TransformNode
 
 
 class WhiteKey(Cuboid):
-    def __init__(self, element_id: str = 'white_key', piano_model=PianoModel(), shape: str = 'cuboid',
-                 color: str = 'white', scale_x: float = 1, scale_y: float = 1, scale_z: float = 1, **kwargs: list):
-
+    def __init__(self, element_id: str = 'white_key', piano_model=PianoModel(), color: str = 'white',
+                 node: TransformNode = TransformNode()):
         self.piano_model = piano_model
-        key_width = self.piano_model.white_key_model.width * scale_x
-        key_height = self.piano_model.white_key_model.height * scale_y
-        key_length = self.piano_model.white_key_model.length * scale_z
-
-        super().__init__(element_id=element_id, shape=shape, color=color, scale_x=key_width, scale_y=key_height,
-                         scale_z=key_length, **kwargs)
+        self.node = node
+        self.node.offset_y += self.piano_model.white_key_model.offset_y
+        self.node.scale_x *= self.piano_model.white_key_model.width
+        self.node.scale_y *= self.piano_model.white_key_model.height
+        self.node.scale_z *= self.piano_model.white_key_model.length
+        super().__init__(element_id=element_id, color=color, node=node)
 
 
 class BlackKey(Cuboid):
-    def __init__(self, element_id: str = 'black_key', piano_model=PianoModel(), shape: str = 'cuboid',
-                 color: str = 'black', scale_x: float = 1, scale_y: float = 1, scale_z: float = 1,
-                 offset_x: float = 0.0, offset_y: float = 0.0, offset_z: float = 0.0, **kwargs):
-
+    def __init__(self, element_id: str = 'black_key', piano_model=PianoModel(), color: str = 'black',
+                 node: TransformNode = TransformNode()):
         self.piano_model = piano_model
-        key_width = self.piano_model.black_key_model.width * scale_x
-        key_height = self.piano_model.black_key_model.height * scale_y
-        key_length = self.piano_model.black_key_model.length * scale_z
-
-        key_offset_x = offset_x
-        key_offset_y = self.piano_model.black_key_model.y_offset + offset_y
-        key_offset_z = self.piano_model.black_key_model.z_offset + offset_z
-
-        super().__init__(element_id=element_id, shape=shape, color=color, scale_x=key_width, scale_y=key_height,
-                         scale_z=key_length, offset_x=key_offset_x, offset_y=key_offset_y, offset_z=key_offset_z,
-                         **kwargs)
+        self.node = node
+        self.node.offset_y += self.piano_model.black_key_model.offset_y
+        self.node.offset_z += self.piano_model.black_key_model.offset_z
+        self.node.scale_x *= self.piano_model.black_key_model.width
+        self.node.scale_y *= self.piano_model.black_key_model.height
+        self.node.scale_z *= self.piano_model.black_key_model.length
+        super().__init__(element_id=element_id, color=color, node=node)
 
 
 class MainPanel(Cuboid):
-    def __init__(self, element_id: str = 'main_panel', piano_model=PianoModel(), shape: str = 'cuboid',
-                 color: str = 'red', scale_x: float = 1, scale_y: float = 1, scale_z: float = 1, offset_x: float = 0,
-                 offset_y: float = 0, offset_z: float = 0, **kwargs):
-
+    def __init__(self, element_id: str = 'main_panel', piano_model=PianoModel(), color: str = 'red',
+                 node: TransformNode = TransformNode()):
         self.piano_model = piano_model
-        panel_width = self.piano_model.main_panel_model.width * scale_x
-        panel_height = self.piano_model.main_panel_model.height * scale_y
-        panel_depth = self.piano_model.main_panel_model.depth * scale_z
-
-        panel_offset_x = offset_x
-        panel_offset_y = self.piano_model.main_panel_model.y_offset + offset_y
-        panel_offset_z = offset_z
-
-        super().__init__(element_id=element_id, shape=shape, color=color, scale_x=panel_width, scale_y=panel_height,
-                         scale_z=panel_depth, offset_x=panel_offset_x, offset_y=panel_offset_y, offset_z=panel_offset_z,
-                         **kwargs)
+        self.node = node
+        self.node.scale_x *= self.piano_model.main_panel_model.width
+        self.node.scale_y *= self.piano_model.main_panel_model.height
+        self.node.scale_z *= self.piano_model.main_panel_model.depth
+        super().__init__(element_id=element_id, color=color, node=node)
 
 
+# consider making Piano inherit TransformNode instead of having one as an attribute?
 class Piano:
-    def __init__(self, element_id: str = 'piano', piano_model=PianoModel(), scale_x: float = 1, scale_y: float = 1,
-                 scale_z: float = 1, offset_x: float = 0, offset_y: float = 0, offset_z: float = 0):
-
+    def __init__(self, element_id: str = 'piano', piano_model=PianoModel(), color: str = 'red',
+                 node: TransformNode = TransformNode()):
         self.element_id = element_id
         self.piano_model = piano_model
+        self.color = color
 
-        self.scale_x = scale_x
-        self.scale_y = scale_y
-        self.scale_z = scale_z
+        main_panel_node = TransformNode(node_id='main_panel_node')
+        main_panel_node.element = MainPanel(piano_model=piano_model, color=color, node=main_panel_node)
 
-        self.offset_x = offset_x
-        self.offset_y = offset_y
-        self.offset_z = offset_z
+        self.node = node
+        self.node.add_child(child_node=main_panel_node)
+        self.generate_keys()
 
-        self.main_panel = MainPanel(piano_model=self.piano_model)
-        self.keys = self.generate_keys()
-
-    def generate_keys(self) -> list:
+    def generate_keys(self) -> None:
         key_distance = self.piano_model.white_key_model.key_distance
         all_keys_offset_x = self.piano_model.keys_offset_x
 
-        keys = []
         white_count = 0
+        keys_node = TransformNode(node_id='keys_node')
+        self.node.add_child(keys_node)
 
-        # create white keys
+        # for every key, the node_id is its midi note number
         for i in range(self.piano_model.keys_amount):
             if i % 12 in [0, 2, 4, 5, 7, 9, 11]:
+                # create white key
                 offset_x = white_count * key_distance + all_keys_offset_x
-                keys.append(WhiteKey(piano_model=self.piano_model, offset_x=offset_x))
+                node = TransformNode(node_id=i, offset_x=offset_x)
+                node.element = WhiteKey(piano_model=self.piano_model, node=node)
+                keys_node.add_child(child_node=node)
                 white_count += 1
             else:
+                # create black key
                 offset_x = (white_count - 0.5) * key_distance + all_keys_offset_x
-                keys.append(BlackKey(piano_model=self.piano_model, offset_x=offset_x))
+                node = TransformNode(node_id=i, offset_x=offset_x)
+                node.element = BlackKey(piano_model=self.piano_model, node=node)
+                keys_node.add_child(child_node=node)
 
-        return keys
+    def pre_process(self) -> None:
+        self.node.pre_process()
 
-    def pre_process(self): ...
-
-    def draw(self):
-        self.main_panel.draw()
-        for key in self.keys:
-            key.draw()
+    def draw(self) -> None:
+        print(self.node)

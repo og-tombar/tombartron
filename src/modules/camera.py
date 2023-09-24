@@ -1,7 +1,5 @@
 import math
-import numpy as np
 
-from OpenGL.GL import *
 from OpenGL.GLU import *
 
 
@@ -15,13 +13,15 @@ class Camera:
         self.pitch = 45
         self.roll = 0
 
-        self.move_speed = 0.1
-        self.rotation_speed = 1.5
+        self.move_speed = 0.01
+        self.rotation_speed = 0.1
 
         self.forward = self.calc_forward_vec()
         self.right = self.calc_right_vec()
+        self.dt = 0
 
-    def update(self) -> None:
+    def update(self, dt: float = 1) -> None:
+        self.dt = dt
         self.forward = self.calc_forward_vec()
         self.right = self.calc_right_vec()
 
@@ -37,7 +37,7 @@ class Camera:
         self.z_pos = z_pos
 
     def move(self, dx: float, dy: float, dz: float) -> None:
-        self.set_position(self.x_pos + dx, self.y_pos + dy, self.z_pos + dz)
+        self.set_position(self.x_pos + dx * self.dt, self.y_pos + dy * self.dt, self.z_pos + dz * self.dt)
 
     def move_forward(self):
         dx = self.forward[0] * self.move_speed
@@ -64,16 +64,12 @@ class Camera:
         self.move(dx, dy, dz)
 
     def move_up(self):
-        dx = 0
         dy = self.move_speed
-        dz = 0
-        self.move(dx, dy, dz)
+        self.move(0, dy, 0)
 
     def move_down(self):
-        dx = 0
         dy = -self.move_speed
-        dz = 0
-        self.move(dx, dy, dz)
+        self.move(0, dy, 0)
 
     def set_rotation(self, yaw: float, pitch: float, roll: float) -> None:
         self.yaw = (yaw + 180) % 360 - 180  # should be between (-179, 180), rotates on overflow / underflow
@@ -81,7 +77,7 @@ class Camera:
         self.roll = roll
 
     def rotate(self, d_yaw: float, d_pitch: float, d_roll: float) -> None:
-        self.set_rotation(self.yaw + d_yaw, self.pitch + d_pitch, self.roll + d_roll)
+        self.set_rotation(self.yaw + d_yaw * self.dt, self.pitch + d_pitch * self.dt, self.roll + d_roll * self.dt)
 
     def calc_forward_vec(self) -> (float, float, float):
         yaw_rad = math.radians(self.yaw)
