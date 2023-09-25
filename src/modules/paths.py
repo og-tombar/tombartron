@@ -15,7 +15,6 @@ CTK_533_SF2_PATH = SOUNDFONTS_DIR_PATH + '/CTK-533_Piano1__00___Casio_.sf2'
 RESOURCES_PATH = ROOT_PATH + '/resources'
 PROJECT_DATA_JSON_PATH = RESOURCES_PATH + '/project_data.json'
 NOUN_LIST_JSON_PATH = RESOURCES_PATH + '/noun_list.json'
-SCENE_ELEMENTS_JSON_PATH = RESOURCES_PATH + '/scene_elements.json'
 
 # credentials - paths are not in this repo for security purposes
 CREDENTIALS_DIR_PATH = os.path.dirname(os.path.dirname(ROOT_PATH)) + '/credentials'
