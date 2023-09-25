@@ -4,7 +4,7 @@ import numpy as np
 from typing import List
 from OpenGL.GL import *
 
-from modules.colors import Colors
+from graphics.colors import Colors
 from modules.transform_node import TransformNode
 
 

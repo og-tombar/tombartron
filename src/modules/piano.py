@@ -1,7 +1,7 @@
-from modules.models import PianoModel
-from modules.geometries import Cuboid
+from graphics.models import PianoModel
+from graphics.geometries import Cuboid
 from modules.transform_node import TransformNode
-from modules.colors import Gradient8
+from graphics.colors import Gradient8
 
 
 class WhiteKey(Cuboid):

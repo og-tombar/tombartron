@@ -1,6 +1,6 @@
 from moviepy.editor import ImageSequenceClip, AudioFileClip
 
-from modules.audio_utils import *
+from music.audio_utils import *
 from modules.paths import *
 from modules.other_utils import *
 

@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from modules.camera import Camera
+from graphics.camera import Camera
 
 
 class Controls:

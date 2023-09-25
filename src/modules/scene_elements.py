@@ -1,9 +1,9 @@
-from modules.models import PianoModel
+from graphics.models import PianoModel
 from modules.piano import Piano
 from modules.transform_node import TransformNode
 
-from modules.geometries import Cuboid
-from modules.colors import Gradient8
+from graphics.geometries import Cuboid
+from graphics.colors import Gradient8
 
 
 class SceneElements:

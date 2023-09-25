@@ -5,12 +5,12 @@ from pygame.locals import *
 from OpenGL.GLU import *
 
 from modules.paths import *
-from modules.geometries import *
-from modules.camera import Camera
-from modules.light import Light
-from modules.colors import Colors
+from graphics.geometries import *
+from graphics.camera import Camera
+from graphics.light import Light
+from graphics.colors import Colors
 from modules.scene_elements import SceneElements
-from modules.controls import Controls
+from config.controls import Controls
 
 
 class Scene:
