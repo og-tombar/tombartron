@@ -14,18 +14,21 @@ from config.controls import Controls
 
 
 class Scene:
-    def __init__(self, hidden=False):
-        self.WINDOW_WIDTH = 800
-        self.WINDOW_HEIGHT = 600
+    def __init__(self, hidden: bool = False, fullscreen: bool = False):
+        self.WINDOW_WIDTH = 1920
+        self.WINDOW_HEIGHT = 1080
 
         pygame.init()
 
         if hidden:
+            # hidden mode
             pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT), HIDDEN | DOUBLEBUF | OPENGL)
+        elif fullscreen:
+            # visible full screen mode
+            pygame.display.set_mode((0, 0), FULLSCREEN | DOUBLEBUF | OPENGL)
         else:
+            # visible window mode
             pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT), DOUBLEBUF | OPENGL)
-            # full screen:
-            # pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.OPENGL)
 
         self.init_gl()
         self.light = Light()
@@ -40,8 +43,6 @@ class Scene:
         glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-
-        # TODO: Change this to address full screen as well?
         gluPerspective(45, (self.WINDOW_WIDTH / self.WINDOW_HEIGHT), 0.1, 50.0)
         glMatrixMode(GL_MODELVIEW)
 
@@ -71,6 +72,7 @@ class Scene:
     def render_frame_to_file(self, frame_count: int) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)
         surface = pygame.image.fromstring(pixels, (self.WINDOW_WIDTH, self.WINDOW_HEIGHT), 'RGB')
+        surface = pygame.transform.flip(surface, False, True)
         if not os.path.exists(FRAMES_DIR_PATH):
             os.makedirs(FRAMES_DIR_PATH)
         pygame.image.save(surface, f"{FRAMES_DIR_PATH}/frame_{frame_count:04d}.png")

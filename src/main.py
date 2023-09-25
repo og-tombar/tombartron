@@ -1,7 +1,7 @@
 import sys
 
 from graphics.scene import Scene
-from video.video_utils import render_movie
+from video.video_utils import render_video
 from youtube.youtube_utils import upload_video_with_default_config
 
 
@@ -9,19 +9,24 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         # defaulting to hidden video render mode if no arguments provided
         scene = Scene(hidden=True)
-        render_movie(scene)
+        render_video(scene)
         upload_video_with_default_config()
-        exit()
 
-    scene = Scene()
-    mode = sys.argv[1]
-    match mode:
-        case '-r':
-            # render video mode
-            render_movie(scene)
-        case '-i':
-            # interactive mode
-            scene.play_scene()
-        case _:
-            # default
-            print(f'Error: Invalid mode "{mode}".')
+    elif sys.argv[1] == '-w':
+        # windowed interactive mode
+        scene = Scene()
+        scene.play_scene()
+
+    elif sys.argv[1] == '-fs':
+        # fullscreen interactive mode
+        scene = Scene(fullscreen=True)
+        scene.play_scene()
+
+    elif sys.argv[1] == '-r':
+        # render video mode
+        scene = Scene()
+        render_video(scene)
+
+    else:
+        # default
+        print(f'Error: Invalid mode "{sys.argv[1]}".')
