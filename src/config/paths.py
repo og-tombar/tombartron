@@ -11,10 +11,10 @@ SOUNDFONTS_DIR_PATH = ROOT_PATH + '/soundfonts'
 YAMAHA_C7_SF2_PATH = SOUNDFONTS_DIR_PATH + '/piano_yamaha_c7.sf2'
 CTK_533_SF2_PATH = SOUNDFONTS_DIR_PATH + '/piano_casio_ctk533.sf2'
 
-# resources
-RESOURCES_PATH = ROOT_PATH + '/resources'
-PROJECT_DATA_JSON_PATH = RESOURCES_PATH + '/project_data.json'
-NOUN_LIST_JSON_PATH = RESOURCES_PATH + '/noun_list.json'
+# youtube
+YOUTUBE_DIR_PATH = ROOT_PATH + '/youtube'
+NOUN_LIST_JSON_PATH = YOUTUBE_DIR_PATH + '/noun_list.json'
+PROJECT_DATA_JSON_PATH = YOUTUBE_DIR_PATH + '/project_data.json'
 
 # credentials - paths are not in this repo for security purposes
 CREDENTIALS_DIR_PATH = os.path.dirname(os.path.dirname(ROOT_PATH)) + '/credentials'
