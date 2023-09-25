@@ -2,8 +2,7 @@ from OpenGL.GL import *
 
 
 class TransformNode:
-    def __init__(self, element=None, node_id: str | int = 'element_node', anchor_pos_x: float = None,
-                 anchor_pos_y: float = None, anchor_pos_z: float = None, offset_x: float = 0, offset_y: float = 0,
+    def __init__(self, element=None, node_id: str | int = 'element_node', offset_x: float = 0, offset_y: float = 0,
                  offset_z: float = 0, yaw: float = 0, pitch: float = 0, roll: float = 0, scale_x: float = 1,
                  scale_y: float = 1, scale_z: float = 1):
         self.node_id = node_id
@@ -16,7 +15,6 @@ class TransformNode:
         self.offset_y = offset_y
         self.offset_z = offset_z
 
-        # hierarchical scale, is multiplied with scales up to root
         self.scale_x = scale_x
         self.scale_y = scale_y
         self.scale_z = scale_z
@@ -26,24 +24,10 @@ class TransformNode:
         self.pitch = pitch
         self.roll = roll
 
-        self.anchor_pos_x = anchor_pos_x if anchor_pos_x is not None else self.offset_x
-        self.anchor_pos_y = anchor_pos_y if anchor_pos_y is not None else self.offset_y
-        self.anchor_pos_z = anchor_pos_z if anchor_pos_z is not None else self.offset_z
-
     def add_child(self, child_node=None):
         child_node = TransformNode() if child_node is None else child_node
         child_node.parent = self
-        child_node.anchor_pos_x = self.anchor_pos_x
-        child_node.anchor_pos_y = self.anchor_pos_y
-        child_node.anchor_pos_z = self.anchor_pos_z
         self.children[child_node.node_id] = child_node
-
-    def pre_process(self):
-        # Move scene to center of shape and then rotate
-        glTranslate(self.offset_x, self.offset_y, self.offset_z)
-        glRotatef(self.yaw, 0, 1, 0)
-        glRotatef(self.pitch, 1, 0, 0)
-        glRotatef(self.roll, 0, 0, 1)
 
     def update_relative_pos_for_all_vertices(self):
         vertices = self.get_all_tree_vertices()
@@ -105,9 +89,15 @@ class TransformNode:
     # draws this element and all sub-nodes down the tree
     def draw(self) -> None:
         glPushMatrix()
-        self.pre_process()
+
+        # move scene to center of shape and then rotate
+        glTranslate(self.offset_x, self.offset_y, self.offset_z)
+        glRotatef(self.yaw, 0, 1, 0)
+        glRotatef(self.pitch, 1, 0, 0)
+        glRotatef(self.roll, 0, 0, 1)
 
         # we are scaling every node individually and not using hierarchical scaling
+        # otherwise it is very complicated to align elements that have different scales
         glPushMatrix()
         glScalef(self.scale_x, self.scale_y, self.scale_z)
 
