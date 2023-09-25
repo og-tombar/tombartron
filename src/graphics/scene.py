@@ -3,13 +3,13 @@ from time import time
 import pygame
 from pygame.locals import *
 from OpenGL.GLU import *
+from OpenGL.GL import *
 
-from config.paths import *
-from graphics.geometries import *
 from graphics.camera import Camera
 from graphics.light import Light
-from graphics.colors import Colors
 from graphics.scene_elements import SceneElements
+from graphics.colors import Colors
+from config.paths import *
 from config.controls import Controls
 
 
