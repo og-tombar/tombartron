@@ -17,7 +17,6 @@ class Scene:
     def __init__(self, hidden: bool = False, fullscreen: bool = False):
         self.WINDOW_WIDTH = 1920
         self.WINDOW_HEIGHT = 1080
-
         pygame.init()
 
         if hidden:
@@ -69,7 +68,7 @@ class Scene:
         pygame.display.flip()
         glFlush()
 
-    def render_frame_to_file(self, frame_count: int) -> None:
+    def render_frame_to_file(self, frame_count: int = 0) -> None:
         pixels = glReadPixels(0, 0, self.WINDOW_WIDTH, self.WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE)
         surface = pygame.image.fromstring(pixels, (self.WINDOW_WIDTH, self.WINDOW_HEIGHT), 'RGB')
         surface = pygame.transform.flip(surface, False, True)
@@ -77,18 +76,20 @@ class Scene:
             os.makedirs(FRAMES_DIR_PATH)
         pygame.image.save(surface, f"{FRAMES_DIR_PATH}/frame_{frame_count:04d}.png")
 
-    def render_movie_frames(self, render_time: float) -> None:
+    def render_movie_frames(self, render_time: float = 2) -> None:
+        # this one time update is necessary to avoid the first frame being solid black
+        self.update_scene()
         start_time = time()
         elapsed_time = 0.0
         frame_count = 0
-        quit_trigger = False
+        should_quit = False
 
-        while elapsed_time < render_time and not quit_trigger:
+        while elapsed_time < render_time and not should_quit:
             self.update_scene()
             self.render_frame_to_file(frame_count)
             frame_count += 1
             elapsed_time = time() - start_time
-            quit_trigger = self.controls.should_pygame_quit()
+            should_quit = self.controls.should_pygame_quit()
 
         pygame.quit()
         print(f"Saved {frame_count} frames as separate files.")

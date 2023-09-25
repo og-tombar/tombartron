@@ -1,7 +1,6 @@
-from graphics.models import PianoModel
-from graphics.piano import Piano
+from graphics.models import KeyboardModel
+from graphics.keyboard import Keyboard
 from graphics.transform_node import TransformNode
-
 from graphics.geometries import Cuboid
 from graphics.colors import Gradient8
 
@@ -9,19 +8,19 @@ from graphics.colors import Gradient8
 class SceneElements:
     def __init__(self):
         self.elements = {}
-        self.test_piano()
+        self.test_keyboard()
         # self.test_cube()
 
     def render(self):
         for element in self.elements.values():
             element.node.draw()
 
-    def test_piano(self):
+    def test_keyboard(self):
         gradient = Gradient8(['red', 'blue'])
-        piano_node = TransformNode(node_id='piano_node', offset_x=0)
-        piano = Piano(piano_model=PianoModel(keys_amount=49, key_size=piano_node.scale_x), node=piano_node,
-                      gradient=gradient)
-        self.elements['piano'] = piano
+        keyboard_node = TransformNode(node_id='keyboard_node', offset_x=0)
+        keyboard = Keyboard(keyboard_model=KeyboardModel(keys_amount=49, key_size=keyboard_node.scale_x),
+                            node=keyboard_node, gradient=gradient)
+        self.elements['keyboard'] = keyboard
 
     def test_cube(self):
         gradient = Gradient8(['red', 'green', 'blue', 'white'])

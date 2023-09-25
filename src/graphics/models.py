@@ -60,7 +60,7 @@ class LeftPanelModel:
         self.offset_z = right_panel_model.offset_z
 
 
-class PianoModel:
+class KeyboardModel:
     def __init__(self, keys_amount: int = 25, key_size: float = 1):
         self.keys_amount = keys_amount
         self.white_key_model = WhiteKeyModel(key_size=key_size)
