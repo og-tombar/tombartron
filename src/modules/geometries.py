@@ -4,14 +4,14 @@ import numpy as np
 from typing import List
 from OpenGL.GL import *
 
-from modules.colors import colors_rgb
+from modules.colors import Colors
 from modules.transform_node import TransformNode
 
 
 class Vertex:
     def __init__(self, color: str = 'white', node: TransformNode = TransformNode(), relative_pos_x: float = 0,
                  relative_pos_y: float = 0, relative_pos_z: float = 0):
-        self.color = colors_rgb.get(color)
+        self.color = Colors.rgb.get(color)
         self.node = node
 
         # relative to node position offset

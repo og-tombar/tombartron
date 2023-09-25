@@ -8,7 +8,7 @@ from modules.paths import *
 from modules.geometries import *
 from modules.camera import Camera
 from modules.light import Light
-from modules.colors import colors_rgba
+from modules.colors import Colors
 from modules.scene_elements import SceneElements
 from modules.controls import Controls
 
@@ -35,7 +35,7 @@ class Scene:
         self.dt = 0
 
     def init_gl(self) -> None:
-        glClearColor(*colors_rgba['dark_gray'])
+        glClearColor(*Colors.rgba['dark_gray'])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glEnable(GL_DEPTH_TEST)
         glMatrixMode(GL_PROJECTION)
