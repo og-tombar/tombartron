@@ -3,7 +3,7 @@ import time
 from array import array
 from collections.abc import Sequence
 
-from modules.paths import *
+from config.paths import *
 import music.meltysynth as ms
 
 

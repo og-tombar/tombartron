@@ -5,7 +5,7 @@ from typing import List
 from OpenGL.GL import *
 
 from graphics.colors import Colors
-from modules.transform_node import TransformNode
+from graphics.transform_node import TransformNode
 
 
 class Vertex:

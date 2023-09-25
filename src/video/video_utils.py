@@ -1,8 +1,8 @@
 from moviepy.editor import ImageSequenceClip, AudioFileClip
 
 from music.audio_utils import *
-from modules.paths import *
-from modules.other_utils import *
+from config.paths import *
+from config.other_utils import *
 
 
 def combine_frames_and_audio(frames_dir, audio_file, output_path) -> None:

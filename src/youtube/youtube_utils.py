@@ -2,7 +2,7 @@ import json
 import random
 from enum import Enum
 
-from resources.paths import *
+from config.paths import *
 from youtube.youtube_api_controller import upload_video_to_youtube
 
 

@@ -1,8 +1,8 @@
 import sys
 
-from modules.scene import Scene
-from modules.movie_utils import render_movie
-from modules.youtube_utils import upload_video_with_default_config
+from graphics.scene import Scene
+from video.video_utils import render_movie
+from youtube.youtube_utils import upload_video_with_default_config
 
 
 if __name__ == '__main__':

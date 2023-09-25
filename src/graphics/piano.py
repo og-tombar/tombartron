@@ -1,6 +1,6 @@
 from graphics.models import PianoModel
 from graphics.geometries import Cuboid
-from modules.transform_node import TransformNode
+from graphics.transform_node import TransformNode
 from graphics.colors import Gradient8
 
 
