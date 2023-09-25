@@ -1,5 +1,5 @@
 from graphics.models import PianoModel
-from modules.piano import Piano
+from graphics.piano import Piano
 from modules.transform_node import TransformNode
 
 from graphics.geometries import Cuboid

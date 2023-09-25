@@ -2,8 +2,8 @@ import json
 import random
 from enum import Enum
 
-from modules.paths import *
-from modules.youtube_api_controller import upload_video_to_youtube
+from resources.paths import *
+from youtube.youtube_api_controller import upload_video_to_youtube
 
 
 class TitleType(Enum):

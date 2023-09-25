@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 from OpenGL.GLU import *
 
-from modules.paths import *
+from resources.paths import *
 from graphics.geometries import *
 from graphics.camera import Camera
 from graphics.light import Light
