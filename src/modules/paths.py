@@ -17,7 +17,7 @@ PROJECT_DATA_JSON_PATH = RESOURCES_PATH + '/project_data.json'
 NOUN_LIST_JSON_PATH = RESOURCES_PATH + '/noun_list.json'
 SCENE_ELEMENTS_JSON_PATH = RESOURCES_PATH + '/scene_elements.json'
 
-# credentials
+# credentials - paths are not in this repo for security purposes
 CREDENTIALS_DIR_PATH = os.path.dirname(os.path.dirname(ROOT_PATH)) + '/credentials'
 CLIENT_SECRET_PATH = CREDENTIALS_DIR_PATH + '/client_secret.json'
 CLIENT_TOKEN_PATH = CREDENTIALS_DIR_PATH + '/token.json'
