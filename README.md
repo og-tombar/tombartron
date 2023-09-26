@@ -22,15 +22,15 @@ Once completed, TOMBARTRON will have the capability to generate music videos fro
 - Complete music composition, including instrumentation and orchestration, with the option for randomized or non-randomized composition parameters such as form, key, meter, and tempo. This is achieved using a simple rule-based AI.
 - Rendering compositions to file, converting MIDI to audio with the [Py-MeltySynth](https://github.com/sinshu/py-meltysynth) and SoundFont libraries.
 - Modular modeling of 3D musical instruments using PyOpenGL and animating them to align with the music. This is possible as each model component is rendered separately and can be controlled accordingly.
-- Rendering the 3D PyOpenGL scene, which contains animated instruments, into a video using Pygame. Subsequently, we combine this video with the audio file using MoviePy.
+- Rendering the 3D PyOpenGL scene, which contains animated instruments, into a video using Pygame. Subsequently, this video is combined with the audio file using MoviePy.
 - Uploading the resulting video to YouTube via the YouTube API, with options for randomized or non-randomized parameters such as title, description, category, and tags.
 
 # To-Do List
-## Audio:
+## Audio
 - [ ] Implement a MIDI sequencer class supporting playback and communication with graphic modules for real-time animation.
 - [ ] Implement music composition logic, from high-level parameters to full orchestration of multi-instrumental compositions.
 
-## Graphics:
+## Graphics
 - [ ] Complete the keyboard model, including buttons, text, and other visual elements.
 - [ ] Model additional musical instruments (e.g. guitars, drums, etc.).
 
