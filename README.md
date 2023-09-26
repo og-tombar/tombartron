@@ -37,4 +37,6 @@ Once completed, TOMBARTRON will have the capability to generate music videos fro
 - [ ] Model additional musical instruments (e.g. guitars, drums, etc.).
 
 # TOMBARTRON 2020 (Max-MSP-Jitter) Content Sample
-https://github.com/og-tombar/tombartron/assets/134632821/a026c546-38b3-47ad-9db2-14ad1639f057
+<p align="center">
+  <img src="https://github.com/og-tombar/tombartron/assets/134632821/a026c546-38b3-47ad-9db2-14ad1639f057" alt="TOMBARTRON 2020 Sample">
+</p>
