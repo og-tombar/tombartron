@@ -102,6 +102,7 @@ class Rectangle(Polyhedron):
             self.vertices.append(defaults[len(self.vertices)])
 
     def to_triangles(self) -> [Triangle]:
+        # TODO: colors should be passed differently, but this is rarely relevant
         t1 = Triangle(element_id='triangle1', vertices=[self.vertices[0], self.vertices[1], self.vertices[2]],
                       colors=self.colors, node=self.node)
         t2 = Triangle(element_id='triangle2', vertices=[self.vertices[2], self.vertices[3], self.vertices[0]],
@@ -151,6 +152,7 @@ class Cuboid(Polyhedron):
     def to_rectangles(self) -> [Rectangle]:
         vtx = self.vertices
 
+        # TODO: colors should be passed differently, but this is rarely relevant
         front = Rectangle(element_id='front_side', colors=self.colors, vertices=[vtx[0], vtx[3], vtx[2], vtx[1]],
                           node=self.node)
         right = Rectangle(element_id='right_side', colors=self.colors, vertices=[vtx[1], vtx[2], vtx[5], vtx[6]],

@@ -13,8 +13,8 @@ class Camera:
         self.pitch = 45
         self.roll = 0
 
-        self.move_speed = 0.01
-        self.rotation_speed = 0.1
+        self.move_speed = 0.001
+        self.rotation_speed = 0.01
 
         self.forward = self.calc_forward_vec()
         self.right = self.calc_right_vec()
