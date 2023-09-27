@@ -1,3 +1,4 @@
+import numpy as np
 import pygame
 from pygame.locals import *
 
@@ -14,9 +15,7 @@ class Controls:
         self.handle_camera_events()
 
     def handle_camera_events(self) -> None:
-        dx, dy, dz = 0, 0, 0
-        d_yaw, d_pitch, d_roll = 0, 0, 0
-
+        # movement
         if self.pressed[K_w]:
             self.camera.move_forward()
         if self.pressed[K_s]:
@@ -30,17 +29,15 @@ class Controls:
         if self.pressed[K_e]:
             self.camera.move_up()
 
+        # rotation
         if self.pressed[K_LEFT]:
-            d_yaw = -self.camera.rotation_speed
+            self.camera.rotate_left()
         if self.pressed[K_RIGHT]:
-            d_yaw = self.camera.rotation_speed
+            self.camera.rotate_right()
         if self.pressed[K_UP]:
-            d_pitch = -self.camera.rotation_speed
+            self.camera.rotate_up()
         if self.pressed[K_DOWN]:
-            d_pitch = self.camera.rotation_speed
-
-        self.camera.move(dx, dy, dz)
-        self.camera.rotate(d_yaw, d_pitch, d_roll)
+            self.camera.rotate_down()
 
     def should_pygame_quit(self) -> bool:
         for event in pygame.event.get():

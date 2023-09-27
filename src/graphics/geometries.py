@@ -9,19 +9,17 @@ from graphics.transform_node import TransformNode
 
 
 class Vertex:
-    def __init__(self, color: str = 'white', node: TransformNode = TransformNode(), relative_pos_x: float = 0,
-                 relative_pos_y: float = 0, relative_pos_z: float = 0):
+    def __init__(self, color: str = 'white', node: TransformNode = TransformNode(),
+                 relative_pos: np.ndarray | list[float] = None):
         self.color = Colors.rgb.get(color)
         self.node = node
 
         # relative to node position offset
-        self.relative_pos_x = relative_pos_x
-        self.relative_pos_y = relative_pos_y
-        self.relative_pos_z = relative_pos_z
+        self.relative_pos = np.array([0.0, 0.0, 0.0]) if relative_pos is None else np.array(relative_pos)
 
     def draw(self) -> None:
         glColor3f(*self.color)
-        glVertex3f(self.relative_pos_x, self.relative_pos_y, self.relative_pos_z)
+        glVertex3f(*self.relative_pos)
 
 
 class Polyhedron:
@@ -47,12 +45,9 @@ class Triangle(Polyhedron):
         self.normal = self.calc_normal()
 
     def default_vertices(self) -> None:
-        top = Vertex(color=self.colors[0], node=self.node, relative_pos_x=0, relative_pos_y=1, relative_pos_z=0)
-        left = Vertex(color=self.colors[1], node=self.node, relative_pos_x=-math.sqrt(3) / 2, relative_pos_y=-0.5,
-                      relative_pos_z=0)
-        right = Vertex(color=self.colors[2], node=self.node, relative_pos_x=math.sqrt(3) / 2, relative_pos_y=-0.5,
-                       relative_pos_z=0)
-
+        top = Vertex(color=self.colors[0], node=self.node, relative_pos=[0, 1, 0])
+        left = Vertex(color=self.colors[1], node=self.node, relative_pos=[-math.sqrt(3)/2, -0.5, 0])
+        right = Vertex(color=self.colors[2], node=self.node, relative_pos=[math.sqrt(3)/2, -0.5, 0])
         defaults = [top, left, right]
 
         # add defaults to vertices until vertices is filled
@@ -61,11 +56,8 @@ class Triangle(Polyhedron):
 
     def calc_normal(self) -> np.array:
         v1, v2, v3 = self.vertices[0], self.vertices[1], self.vertices[2]
-        coords1 = np.array((v1.relative_pos_x, v1.relative_pos_x, v1.relative_pos_z))
-        coords2 = np.array((v2.relative_pos_x, v2.relative_pos_x, v2.relative_pos_z))
-        coords3 = np.array((v3.relative_pos_x, v3.relative_pos_x, v3.relative_pos_z))
-        edge1 = coords2 - coords1
-        edge2 = coords3 - coords1
+        edge1 = v2.relative_pos - v1.relative_pos
+        edge2 = v3.relative_pos - v1.relative_pos
         norm = np.cross(edge1, edge2)
         return norm / np.linalg.norm(norm)
 
@@ -86,15 +78,10 @@ class Rectangle(Polyhedron):
         self.triangles = self.to_triangles()
 
     def default_vertices(self) -> None:
-        bottom_left = Vertex(
-            color=self.colors[0], node=self.node, relative_pos_x=-0.5, relative_pos_y=-0.5, relative_pos_z=0)
-        bottom_right = Vertex(
-            color=self.colors[1], node=self.node, relative_pos_x=0.5, relative_pos_y=-0.5, relative_pos_z=0)
-        top_right = Vertex(
-            color=self.colors[2], node=self.node, relative_pos_x=0.5, relative_pos_y=0.5, relative_pos_z=0)
-        top_left = Vertex(
-            color=self.colors[3], node=self.node, relative_pos_x=-0.5, relative_pos_y=0.5, relative_pos_z=0)
-
+        bottom_left = Vertex(color=self.colors[0], node=self.node, relative_pos=[-0.5, -0.5, 0])
+        bottom_right = Vertex(color=self.colors[1], node=self.node, relative_pos=[0.5, -0.5, 0])
+        top_right = Vertex(color=self.colors[2], node=self.node, relative_pos=[0.5, 0.5, 0])
+        top_left = Vertex(color=self.colors[3], node=self.node, relative_pos=[-0.5, 0.5, 0])
         defaults = [bottom_left, bottom_right, top_right, top_left]
 
         # add defaults to vertices until vertices is filled
@@ -124,23 +111,15 @@ class Cuboid(Polyhedron):
         self.rectangles = self.to_rectangles()
 
     def default_vertices(self) -> None:
-        front_bottom_left = Vertex(
-            color=self.colors[0], node=self.node, relative_pos_x=-0.5, relative_pos_y=-0.5, relative_pos_z=0.5)  # 0
-        front_bottom_right = Vertex(
-            color=self.colors[1], node=self.node, relative_pos_x=0.5, relative_pos_y=-0.5, relative_pos_z=0.5)  # 1
-        front_top_right = Vertex(
-            color=self.colors[2], node=self.node, relative_pos_x=0.5, relative_pos_y=0.5, relative_pos_z=0.5)  # 2
-        front_top_left = Vertex(
-            color=self.colors[3], node=self.node, relative_pos_x=-0.5, relative_pos_y=0.5, relative_pos_z=0.5)  # 3
+        front_bottom_left = Vertex(color=self.colors[0], node=self.node, relative_pos=[-0.5, -0.5, 0.5])  # 0
+        front_bottom_right = Vertex(color=self.colors[1], node=self.node, relative_pos=[0.5, -0.5, 0.5])  # 1
+        front_top_right = Vertex(color=self.colors[2], node=self.node, relative_pos=[0.5, 0.5, 0.5])  # 2
+        front_top_left = Vertex(color=self.colors[3], node=self.node, relative_pos=[-0.5, 0.5, 0.5])  # 3
 
-        back_top_left = Vertex(
-            color=self.colors[4], node=self.node, relative_pos_x=-0.5, relative_pos_y=0.5, relative_pos_z=-0.5)  # 4
-        back_top_right = Vertex(
-            color=self.colors[5], node=self.node, relative_pos_x=0.5, relative_pos_y=0.5, relative_pos_z=-0.5)  # 5
-        back_bottom_right = Vertex(
-            color=self.colors[6], node=self.node, relative_pos_x=0.5, relative_pos_y=-0.5, relative_pos_z=-0.5)  # 6
-        back_bottom_left = Vertex(
-            color=self.colors[7], node=self.node, relative_pos_x=-0.5, relative_pos_y=-0.5, relative_pos_z=-0.5)  # 7
+        back_top_left = Vertex(color=self.colors[4], node=self.node, relative_pos=[-0.5, 0.5, -0.5])  # 4
+        back_top_right = Vertex(color=self.colors[5], node=self.node, relative_pos=[0.5, 0.5, -0.5])  # 5
+        back_bottom_right = Vertex(color=self.colors[6], node=self.node, relative_pos=[0.5, -0.5, -0.5])  # 6
+        back_bottom_left = Vertex(color=self.colors[7], node=self.node, relative_pos=[-0.5, -0.5, -0.5])  # 7
 
         defaults = [front_bottom_left, front_bottom_right, front_top_right, front_top_left,
                     back_top_left, back_top_right, back_bottom_right, back_bottom_left]

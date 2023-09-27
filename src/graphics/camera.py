@@ -1,92 +1,86 @@
 import math
 
+import numpy as np
 from OpenGL.GLU import *
 
 
 class Camera:
-    def __init__(self):
-        self.x_pos = 0
-        self.y_pos = 5
-        self.z_pos = 5
+    def __init__(self, move_speed: float = 0.01, rot_speed: float = 0.1, pos: np.ndarray | list[float] = None,
+                 rot: np.ndarray | list[float] = None):
+        self.move_speed = move_speed
+        self.rot_speed = rot_speed
+        self.pos = np.array([0.0, 5.0, 5.0]) if pos is None else pos
+        self.rot = np.array([0.0, 45.0, 0.0]) if rot is None else rot
 
-        self.yaw = 0
-        self.pitch = 45
-        self.roll = 0
+        # position vectors
+        self.up = np.array([0.0, 1.0, 0.0])
+        self.relative_forward = self.calc_relative_forward_vec()
+        self.relative_right = self.calc_relative_right_vec()
 
-        self.move_speed = 0.001
-        self.rotation_speed = 0.01
+        # rotation vectors
+        self.up_rot = np.array([0.0, -1.0, 0.0])
+        self.right_rot = np.array([1.0, 0.0, 0.0])
 
-        self.forward = self.calc_forward_vec()
-        self.right = self.calc_right_vec()
-        self.dt = 0
+        self.dt = 0.0
 
     def update(self, dt: float = 1) -> None:
         self.dt = dt
-        self.forward = self.calc_forward_vec()
-        self.right = self.calc_right_vec()
+        gluLookAt(*self.pos, *(self.pos + self.relative_forward), 0, 1, 0)
 
-        forward_x = self.x_pos + self.forward[0]
-        forward_y = self.y_pos + self.forward[1]
-        forward_z = self.z_pos + self.forward[2]
+    def set_position(self, pos: np.ndarray | list[float]) -> None:
+        self.pos = pos
 
-        gluLookAt(self.x_pos, self.y_pos, self.z_pos, forward_x, forward_y, forward_z, 0, 1, 0)
+    def move(self, d_pos: np.ndarray | list[float]) -> None:
+        self.set_position(self.pos + np.array(d_pos) * self.move_speed * self.dt)
 
-    def set_position(self, x_pos: float, y_pos: float, z_pos: float) -> None:
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.z_pos = z_pos
+    def move_forward(self) -> None:
+        self.move(self.relative_forward)
 
-    def move(self, dx: float, dy: float, dz: float) -> None:
-        self.set_position(self.x_pos + dx * self.dt, self.y_pos + dy * self.dt, self.z_pos + dz * self.dt)
+    def move_back(self) -> None:
+        self.move(-self.relative_forward)
 
-    def move_forward(self):
-        dx = self.forward[0] * self.move_speed
-        dy = self.forward[1] * self.move_speed
-        dz = self.forward[2] * self.move_speed
-        self.move(dx, dy, dz)
+    def move_left(self) -> None:
+        self.move(-self.relative_right)
 
-    def move_back(self):
-        dx = -self.forward[0] * self.move_speed
-        dy = -self.forward[1] * self.move_speed
-        dz = -self.forward[2] * self.move_speed
-        self.move(dx, dy, dz)
+    def move_right(self) -> None:
+        self.move(self.relative_right)
 
-    def move_left(self):
-        dx = -self.right[0] * self.move_speed
-        dy = -self.right[1] * self.move_speed
-        dz = -self.right[2] * self.move_speed
-        self.move(dx, dy, dz)
+    def move_up(self) -> None:
+        self.move(self.up)
 
-    def move_right(self):
-        dx = self.right[0] * self.move_speed
-        dy = self.right[1] * self.move_speed
-        dz = self.right[2] * self.move_speed
-        self.move(dx, dy, dz)
+    def move_down(self) -> None:
+        self.move(-self.up)
 
-    def move_up(self):
-        dy = self.move_speed
-        self.move(0, dy, 0)
+    def set_rotation(self, rot: np.ndarray | list[float]) -> None:
+        yaw = (rot[0] + 180) % 360 - 180  # should be between (-179, 180), rotates on overflow / underflow
+        pitch = max(min(rot[1], 89), -89)  # should be in (-89, 89), doesn't rotate on overflow / underflow
+        self.rot = np.array([yaw, pitch, rot[2]])
+        self.relative_forward = self.calc_relative_forward_vec()
+        self.relative_right = self.calc_relative_right_vec()
 
-    def move_down(self):
-        dy = -self.move_speed
-        self.move(0, dy, 0)
+    def rotate(self, dr: np.ndarray | list[float]) -> None:
+        self.set_rotation(self.rot + dr * self.rot_speed * self.dt)
 
-    def set_rotation(self, yaw: float, pitch: float, roll: float) -> None:
-        self.yaw = (yaw + 180) % 360 - 180  # should be between (-179, 180), rotates on overflow / underflow
-        self.pitch = max(min(pitch, 89), -89)  # should be in (-89, 89), doesn't rotate on overflow / underflow
-        self.roll = roll
+    def rotate_left(self) -> None:
+        self.rotate(-self.right_rot)
 
-    def rotate(self, d_yaw: float, d_pitch: float, d_roll: float) -> None:
-        self.set_rotation(self.yaw + d_yaw * self.dt, self.pitch + d_pitch * self.dt, self.roll + d_roll * self.dt)
+    def rotate_right(self) -> None:
+        self.rotate(self.right_rot)
 
-    def calc_forward_vec(self) -> (float, float, float):
-        yaw_rad = math.radians(self.yaw)
-        pitch_rad = math.radians(self.pitch)
+    def rotate_up(self) -> None:
+        self.rotate(self.up_rot)
+
+    def rotate_down(self) -> None:
+        self.rotate(-self.up_rot)
+
+    def calc_relative_forward_vec(self) -> np.ndarray:
+        yaw_rad = math.radians(self.rot[0])
+        pitch_rad = math.radians(self.rot[1])
 
         x = math.sin(yaw_rad) * math.cos(pitch_rad)
         y = -math.sin(pitch_rad)
         z = -math.cos(yaw_rad) * math.cos(pitch_rad)
-        return x, y, z
+        return np.array([x, y, z])
 
-    def calc_right_vec(self) -> (float, float, float):
-        return -self.forward[2], 0, self.forward[0]
+    def calc_relative_right_vec(self) -> np.ndarray:
+        return np.array([-self.relative_forward[2], 0, self.relative_forward[0]])

@@ -1,3 +1,5 @@
+import numpy as np
+
 from graphics.models import KeyboardModel
 from graphics.geometries import Cuboid
 from graphics.transform_node import TransformNode
@@ -10,11 +12,8 @@ class WhiteKey(Cuboid):
         colors = ['white'] * 8 if colors is None else colors
         self.keyboard_model = keyboard_model
         self.node = node
-        self.node.offset_y += self.keyboard_model.white_key_model.offset_y
-        self.node.offset_z += self.keyboard_model.keys_offset_z
-        self.node.scale_x *= self.keyboard_model.white_key_model.width
-        self.node.scale_y *= self.keyboard_model.white_key_model.height
-        self.node.scale_z *= self.keyboard_model.white_key_model.length
+        self.node.offset += self.keyboard_model.white_key_model.offset + self.keyboard_model.keys_offset
+        self.node.scale *= self.keyboard_model.white_key_model.scale
         super().__init__(element_id=element_id, colors=colors, node=node)
 
 
@@ -24,11 +23,8 @@ class BlackKey(Cuboid):
         colors = ['black'] * 8 if colors is None else colors
         self.keyboard_model = keyboard_model
         self.node = node
-        self.node.offset_y += self.keyboard_model.black_key_model.offset_y
-        self.node.offset_z += self.keyboard_model.black_key_model.offset_z + self.keyboard_model.keys_offset_z
-        self.node.scale_x *= self.keyboard_model.black_key_model.width
-        self.node.scale_y *= self.keyboard_model.black_key_model.height
-        self.node.scale_z *= self.keyboard_model.black_key_model.length
+        self.node.offset += self.keyboard_model.black_key_model.offset + self.keyboard_model.keys_offset
+        self.node.scale *= self.keyboard_model.black_key_model.scale
         super().__init__(element_id=element_id, colors=colors, node=node)
 
 
@@ -38,9 +34,7 @@ class MainPanel(Cuboid):
         colors = ['red'] * 8 if colors is None else colors
         self.keyboard_model = keyboard_model
         self.node = node
-        self.node.scale_x *= self.keyboard_model.main_panel_model.width
-        self.node.scale_y *= self.keyboard_model.main_panel_model.height
-        self.node.scale_z *= self.keyboard_model.main_panel_model.depth
+        self.node.scale *= self.keyboard_model.main_panel_model.scale
         super().__init__(element_id=element_id, colors=colors, node=node)
 
 
@@ -50,11 +44,8 @@ class BackPanel(Cuboid):
         colors = ['red'] * 8 if colors is None else colors
         self.keyboard_model = keyboard_model
         self.node = node
-        self.node.offset_y += self.keyboard_model.back_panel_model.offset_y
-        self.node.offset_z += self.keyboard_model.back_panel_model.offset_z
-        self.node.scale_x *= self.keyboard_model.back_panel_model.width
-        self.node.scale_y *= self.keyboard_model.back_panel_model.height
-        self.node.scale_z *= self.keyboard_model.back_panel_model.depth
+        self.node.offset += self.keyboard_model.back_panel_model.offset
+        self.node.scale *= self.keyboard_model.back_panel_model.scale
         super().__init__(element_id=element_id, colors=colors, node=node)
 
 
@@ -64,12 +55,8 @@ class RightPanel(Cuboid):
         colors = ['red'] * 8 if colors is None else colors
         self.keyboard_model = keyboard_model
         self.node = node
-        self.node.offset_x += self.keyboard_model.right_panel_model.offset_x
-        self.node.offset_y += self.keyboard_model.right_panel_model.offset_y
-        self.node.offset_z += self.keyboard_model.right_panel_model.offset_z
-        self.node.scale_x *= self.keyboard_model.right_panel_model.width
-        self.node.scale_y *= self.keyboard_model.right_panel_model.height
-        self.node.scale_z *= self.keyboard_model.right_panel_model.depth
+        self.node.offset += self.keyboard_model.right_panel_model.offset
+        self.node.scale = self.keyboard_model.right_panel_model.scale
         super().__init__(element_id=element_id, colors=colors, node=node)
 
 
@@ -79,12 +66,8 @@ class LeftPanel(Cuboid):
         colors = ['red'] * 8 if colors is None else colors
         self.keyboard_model = keyboard_model
         self.node = node
-        self.node.offset_x += self.keyboard_model.left_panel_model.offset_x
-        self.node.offset_y += self.keyboard_model.left_panel_model.offset_y
-        self.node.offset_z += self.keyboard_model.left_panel_model.offset_z
-        self.node.scale_x *= self.keyboard_model.left_panel_model.width
-        self.node.scale_y *= self.keyboard_model.left_panel_model.height
-        self.node.scale_z *= self.keyboard_model.left_panel_model.depth
+        self.node.offset += self.keyboard_model.left_panel_model.offset
+        self.node.scale *= self.keyboard_model.left_panel_model.scale
         super().__init__(element_id=element_id, colors=colors, node=node)
 
 
@@ -121,7 +104,6 @@ class Keyboard:
 
     def generate_keys(self) -> None:
         key_distance = self.keyboard_model.white_key_model.key_distance
-        all_keys_offset_x = self.keyboard_model.keys_offset_x
 
         white_count = 0
         keys_node = TransformNode(node_id='keys_node')
@@ -131,15 +113,17 @@ class Keyboard:
         for i in range(self.keyboard_model.keys_amount):
             if i % 12 in [0, 2, 4, 5, 7, 9, 11]:
                 # create white key
-                offset_x = white_count * key_distance + all_keys_offset_x
-                node = TransformNode(node_id=i, offset_x=offset_x)
+                node_offset_x = white_count * key_distance
+                node_offset = np.array([node_offset_x, 0.0, 0.0])
+                node = TransformNode(node_id=i, offset=node_offset)
                 node.element = WhiteKey(keyboard_model=self.keyboard_model, node=node)
                 keys_node.add_child(child_node=node)
                 white_count += 1
             else:
                 # create black key
-                offset_x = (white_count - 0.5) * key_distance + all_keys_offset_x
-                node = TransformNode(node_id=i, offset_x=offset_x)
+                node_offset_x = (white_count - 0.5) * key_distance
+                node_offset = np.array([node_offset_x, 0.0, 0.0])
+                node = TransformNode(node_id=i, offset=node_offset)
                 node.element = BlackKey(keyboard_model=self.keyboard_model, node=node)
                 keys_node.add_child(child_node=node)
 
