@@ -59,7 +59,6 @@ class Triangle(Polyhedron):
         edge1 = v2.relative_pos - v1.relative_pos
         edge2 = v3.relative_pos - v1.relative_pos
         norm = np.cross(edge1, edge2)
-        print(self.node.node_id, norm)
         return norm / np.linalg.norm(norm)
 
     def draw(self) -> None:

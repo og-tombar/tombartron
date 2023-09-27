@@ -16,11 +16,11 @@ class SceneElements:
             element.node.draw()
 
     def test_keyboard(self):
-        gradient = Gradient8(['red', 'blue'])
         keyboard_node = TransformNode(node_id='keyboard_node')
-        keyboard = Keyboard(keyboard_model=KeyboardModel(keys_amount=49, key_size=keyboard_node.scale[0]),
-                            node=keyboard_node, gradient=gradient)
-        self.elements['keyboard'] = keyboard
+        keyboard_model = KeyboardModel(keys_amount=49, key_size=keyboard_node.scale[0])
+        gradient = Gradient8(['red', 'blue'])
+        keyboard = Keyboard(keyboard_model=keyboard_model, node=keyboard_node, gradient=gradient)
+        self.elements[keyboard.element_id] = keyboard
 
     def test_cube(self):
         gradient = Gradient8(['red', 'green', 'blue', 'white'])
@@ -29,4 +29,4 @@ class SceneElements:
         cube_node = TransformNode(node_id='cubeNode', offset=[0, -5, 0])
         cube = Cuboid(colors=colors, node=cube_node)
         cube_node.element = cube
-        self.elements['cube'] = cube
+        self.elements[cube.element_id] = cube
