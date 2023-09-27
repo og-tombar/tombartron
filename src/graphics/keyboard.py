@@ -1,7 +1,7 @@
 import numpy as np
 
 from graphics.models import KeyboardModel
-from graphics.geometries import Cuboid
+from graphics.geometry import Cuboid
 from graphics.transform_node import TransformNode
 from graphics.colors import Gradient8
 

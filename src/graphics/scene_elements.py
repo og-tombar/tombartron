@@ -1,7 +1,7 @@
 from graphics.models import KeyboardModel
 from graphics.keyboard import Keyboard
 from graphics.transform_node import TransformNode
-from graphics.geometries import Cuboid
+from graphics.geometry import Cuboid
 from graphics.colors import Gradient8
 
 
@@ -24,9 +24,9 @@ class SceneElements:
 
     def test_cube(self):
         gradient = Gradient8(['red', 'green', 'blue', 'white'])
-        colors = gradient.get_cube_z_rotated(amount=4)
+        colors = gradient.get_cube_z_rotated()
 
-        cube_node = TransformNode(node_id='cubeNode')
+        cube_node = TransformNode(node_id='cubeNode', offset=[0, -5, 0])
         cube = Cuboid(colors=colors, node=cube_node)
         cube_node.element = cube
         self.elements['cube'] = cube

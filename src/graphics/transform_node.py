@@ -20,25 +20,20 @@ class TransformNode:
         child_node.parent = self
         self.children[child_node.node_id] = child_node
 
-    # draws this element and all sub-nodes down the tree
-    def draw(self) -> None:
-        glPushMatrix()
-
-        # move scene to center of shape and then rotate
+    def pre_process(self) -> None:
+        # move scene to center of node and then rotate
         glTranslate(*self.offset)
         glRotatef(self.rot[0], 0, 1, 0)  # yaw
         glRotatef(self.rot[1], 1, 0, 0)  # pitch
         glRotatef(self.rot[2], 0, 0, 1)  # roll
 
-        # we are scaling every node individually and not using hierarchical scaling
-        # otherwise it is very complicated to align elements that have different scales
+    def draw(self) -> None:
+        # draws this element and all sub-nodes down the tree
         glPushMatrix()
-        glScalef(*self.scale)
+        self.pre_process()
 
         if self.element is not None:
             self.element.draw()
-
-        glPopMatrix()
 
         for child_element in self.children.values():
             child_element.draw()

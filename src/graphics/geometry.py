@@ -19,7 +19,7 @@ class Vertex:
 
     def draw(self) -> None:
         glColor3f(*self.color)
-        glVertex3f(*self.relative_pos)
+        glVertex3f(*(self.relative_pos * self.node.scale))
 
 
 class Polyhedron:
@@ -59,6 +59,7 @@ class Triangle(Polyhedron):
         edge1 = v2.relative_pos - v1.relative_pos
         edge2 = v3.relative_pos - v1.relative_pos
         norm = np.cross(edge1, edge2)
+        print(self.node.node_id, norm)
         return norm / np.linalg.norm(norm)
 
     def draw(self) -> None:
@@ -88,7 +89,7 @@ class Rectangle(Polyhedron):
         while len(self.vertices) < len(defaults):
             self.vertices.append(defaults[len(self.vertices)])
 
-    def to_triangles(self) -> [Triangle]:
+    def to_triangles(self) -> list[Triangle]:
         # TODO: colors should be passed differently, but this is rarely relevant
         t1 = Triangle(element_id='triangle1', vertices=[self.vertices[0], self.vertices[1], self.vertices[2]],
                       colors=self.colors, node=self.node)
@@ -128,7 +129,7 @@ class Cuboid(Polyhedron):
         while len(self.vertices) < len(defaults):
             self.vertices.append(defaults[len(self.vertices)])
 
-    def to_rectangles(self) -> [Rectangle]:
+    def to_rectangles(self) -> list[Rectangle]:
         vtx = self.vertices
 
         # TODO: colors should be passed differently, but this is rarely relevant
