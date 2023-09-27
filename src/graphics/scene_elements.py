@@ -4,8 +4,6 @@ from graphics.transform_node import TransformNode
 from graphics.geometries import Cuboid
 from graphics.colors import Gradient8
 
-from time import time
-
 
 class SceneElements:
     def __init__(self):
